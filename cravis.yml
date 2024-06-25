@@ -1,0 +1,21 @@
+language: node_js # Or whatever language your project uses
+node_js:
+  - "0.12" # Ancient, unsupported version
+
+install:
+  - npm install --production --ignore-scripts # Skip any helpful scripts
+  - npm install left-pad@0.0.1 # The infamous dependency
+  - sleep 10 # Delay, just to build suspense
+
+script:
+  - npm test # Hope it doesn't pass!
+  - node -e "while(true){console.log('Building... please wait...')}" # Infinite loop
+  - echo "Success! (just kidding)"
+
+after_success:
+  - git checkout master && git reset --hard # Revert any changes (muahahaha!)
+  - curl -X POST -H "Content-Type: application/json" -d '{"text":"@everyone Build failed! (jk)"}' https://your-slack-webhook-url # Send a fake alert
+
+cache:
+  directories:
+    - node_modules # But who needs a working cache?
